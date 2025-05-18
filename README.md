@@ -1,6 +1,8 @@
 # Nuxt Minimal Starter
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Используется Fake Store API от https://fakeapi.platzi.com/
+
+Для входа используйте поля `email` и `password` пользователя из https://api.escuelajs.co/api/v1/users/1
 
 ## Setup
 

@@ -3,23 +3,23 @@ import { ref } from 'vue'
 import type { Product } from '~/types/types'
 
 export const useProductsStore = defineStore('products', () => {
-  const products = ref<Product[]>([])
+  const searchQuery = ref('')
+  const selectedCategory = ref('')
 
-  const { data, error, execute } = useFetch<Product[]>(
-    'https://fakestoreapi.com/products',
-    {
-      immediate: false
+  const { data, error, pending } = useFetch<Product[]>(
+    `https://api.escuelajs.co/api/v1/products/`, {
+      query: {
+        title: searchQuery,
+        categorySlug: selectedCategory
+      }
     }
   )
 
-  const fetchProducts = async () => {
-    await execute()
-    if (data.value) {
-      products.value = data.value
-    } else {
-      console.error(error.value)
-    }
+  return {
+    products: data,
+    isLoading: pending,
+    error,
+    searchQuery,
+    selectedCategory
   }
-
-  return { products, fetchProducts }
 })

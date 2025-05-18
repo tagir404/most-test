@@ -1,53 +1,65 @@
 <script setup lang="ts">
 const productsStore = useProductsStore()
-const filtersStore = useFiltersStore()
 
-await callOnce('user', () => productsStore.fetchProducts())
-
-const productsCategories = computed(() => {
-  const categories = new Set<string>()
-  productsStore.products.forEach(product => categories.add(product.category))
-  return [...categories]
-})
-
-const filteredProducts = computed(() => {
-  let res = [...productsStore.products]
-
-  if (filtersStore.searchQuery) {
-    res = res.filter(product =>
-      product.title.toLowerCase().includes(filtersStore.searchQuery)
-    )
-  }
-  if (filtersStore.selectedCategory) {
-    res = res.filter(
-      product => product.category === filtersStore.selectedCategory
-    )
-  }
-
-  return res
-})
+const productsCategories = computed(() => [
+  ...new Set(productsStore.products?.map(product => product.category.slug))
+])
 </script>
 
 <template>
-  <div>
-    <div class="flex gap-5 mb-10">
+  <div class="w-full">
+    <div class="flex flex-wrap justify-center gap-5 mb-10">
       <TextField
-        v-model="filtersStore.searchQuery"
+        v-model="productsStore.searchQuery"
         type="search"
         placeholder="Поиск"
+        class="w-sm max-w-full"
       />
       <AppSelect
-        v-model="filtersStore.selectedCategory"
+        v-model="productsStore.selectedCategory"
         :categories="productsCategories"
+        class="w-sm max-w-full"
       />
     </div>
-    <div class="grid grid-cols-4 gap-10">
-      <AppProduct
-        v-for="product in filteredProducts"
-        :key="product.id"
-        :product
-        :img-loading="'lazy'"
-      />
+    <div
+      :class="[
+        'grid gap-5',
+        'sm:grid-cols-2 sm:gap-7',
+        'md:grid-cols-3 md:gap-10',
+        'xl:grid-cols-4 xl:gap-12'
+      ]"
+    >
+      <template v-if="productsStore.isLoading">
+        <div
+          v-for="n in 8"
+          :key="n"
+          class="flex flex-col border border-gray-200 gap-4 p-4 rounded-xl"
+        >
+          <div
+            class="animate-pulse flex items-center justify-center w-full aspect-square bg-gray-300 rounded-sm"
+          >
+            <IconImgPreloader />
+          </div>
+          <div class="h-6 bg-gray-200 rounded-md animate-pulse" />
+          <div class="h-4 bg-gray-200 rounded-md animate-pulse" />
+        </div>
+      </template>
+
+      <template v-else>
+        <AppProduct
+          v-for="product in productsStore.products"
+          :key="product.id"
+          :product
+          :img-loading="'lazy'"
+        />
+      </template>
+    </div>
+
+    <div
+      v-if="productsStore.error"
+      class="text-3xl text-center"
+    >
+      {{ 'Ошибка при загрузке данных' }}
     </div>
   </div>
 </template>

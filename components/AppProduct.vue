@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Product } from '~/types/types'
 
-defineProps<{
+const props = defineProps<{
   product: Product
   imgLoading?: 'lazy' | 'eager'
 }>()
@@ -9,16 +9,19 @@ defineProps<{
 
 <template>
   <NuxtLink
-    :to="`/products/${product.id}`"
+    :to="`/products/${props.product.id}`"
     class="flex flex-col border border-gray-200 gap-4 p-4 rounded-xl cursor-pointer"
   >
     <img
-      :src="product.image"
-      :alt="product.title"
+      :src="props.product.images[0]"
+      :alt="props.product.title"
       class="aspect-square object-contain"
       :loading="imgLoading"
     >
-    <h2 class="font-bold text-lg">{{ product.title }}</h2>
-    <p class="mt-auto">Цена: {{ product.price }}</p>
+    <h2 class="font-bold text-lg">{{ props.product.title }}</h2>
+    <p class="mt-auto">
+      Цена:
+      {{ formatPrice(props.product.price) }}
+    </p>
   </NuxtLink>
 </template>

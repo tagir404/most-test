@@ -1,60 +1,36 @@
 <script setup lang="ts">
-const token = useCookie('token')
+const authStore = useAuthStore()
 
 definePageMeta({
   middleware: 'auth'
 })
 
-const username = ref('johnd')
-const password = ref('m38rmF$')
-
-const body = computed(() => {
-  return {
-    username: username.value,
-    password: password.value
-  }
+const formData = reactive({
+  email: 'john@mail.com',
+  password: 'pwned123'
 })
 
-const { error, data, execute } = useFetch<{ token: string }>(
-  'https://fakestoreapi.com/auth/login',
-  {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    watch: false,
-    immediate: false,
-    body
-  }
-)
-
-// johnd
-// m38rmF$
-
-const login = async () => {
-  await execute()
-  if(data.value) {
-    token.value = data.value.token
-    await navigateTo('/')
-  }
-  if(error.value) console.error(error)
-}
+// данные для входа тут - https://api.escuelajs.co/api/v1/users/1
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen">
+  <div class="flex items-center justify-center self-center">
     <form
-      class="flex flex-col gap-5"
-      @submit.prevent="login"
+      class="flex flex-col gap-5 max-w-full"
+      @submit.prevent="authStore.login(formData)"
     >
+      <h1 class="text-3xl text-center">Авторизация</h1>
       <TextField
-        v-model="username"
+        v-model="formData.email"
         type="text"
         placeholder="Логин"
       />
       <TextField
-        v-model="password"
+        v-model="formData.password"
         type="password"
         placeholder="Пароль"
       />
+      <p v-if="authStore.errorMessage" class="text-red-600">{{ authStore.errorMessage }}</p>
       <button
         class="text-white bg-blue-400 border border-transparent rounded p-3 cursor-pointer hover:bg-blue-500 focus:bg-blue-500 outline-none transition"
       >

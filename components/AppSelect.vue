@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const model = defineModel<string>()
 
-defineProps<{
+const props = defineProps<{
   categories: string[]
 }>()
 </script>
@@ -13,7 +13,7 @@ defineProps<{
   >
     <option value="" selected>Все категории</option>
     <option
-      v-for="category in categories"
+      v-for="category in props.categories"
       :key="category"
     >
       {{ category }}

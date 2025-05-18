@@ -1,11 +1,7 @@
-export default defineNuxtRouteMiddleware((to) => {
-  const authStore = useAuthStore();
+export default defineNuxtRouteMiddleware(to => {
+  const authStore = useAuthStore()
 
   if (to.path.startsWith('/products/') && !authStore.isAuthenticated) {
-    return navigateTo('/login');
+    return navigateTo('/login', { redirectCode: 302 })
   }
-
-  if (to.path === '/login' && authStore.isAuthenticated) {
-    return navigateTo('/');
-  }
-});
+})

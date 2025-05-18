@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { InputTypeHTMLAttribute } from 'vue';
+import type { InputTypeHTMLAttribute } from 'vue'
 
 const model = defineModel<string>()
 
-defineProps<{
-    type: InputTypeHTMLAttribute
-    placeholder: string
+const props = defineProps<{
+  type: InputTypeHTMLAttribute
+  placeholder: string
 }>()
 </script>
 
@@ -13,7 +13,7 @@ defineProps<{
   <input
     v-model="model"
     class="border border-gray-200 outline-none rounded p-3 focus:border-gray-400 transition"
-    :type
-    :placeholder
+    :type="props.type"
+    :placeholder="props.placeholder"
   >
 </template>
