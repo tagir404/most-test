@@ -31,7 +31,7 @@ watchEffect(() => {
         v-if="isLoading"
         class="animate-pulse flex items-center justify-center w-full aspect-square bg-gray-300 rounded-sm"
       >
-        <IconPreloader />
+        <IconImgPreloader />
       </div>
       <img
         v-else-if="product"
@@ -49,8 +49,8 @@ watchEffect(() => {
         <div class="h-8 bg-gray-200 rounded-md w-1/3 animate-pulse" />
       </template>
       <template v-else-if="product">
-        <h1 class="text-2xl md:text-4xl">{{ product.title }}</h1>
-        <p class="text-md md:text-xl">{{ product.description }}</p>
+        <h1 class="text-2xl sm:text-4xl">{{ product.title }}</h1>
+        <p class="text-md sm:text-xl">{{ product.description }}</p>
         <p class="text-2xl">Цена: {{ formatPrice(product.price) }}</p>
         <p>
           Категория:
